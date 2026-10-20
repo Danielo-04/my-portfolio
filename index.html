@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Author: Daniel Baez-Perez
+    Date: 10/20/2026
+    Assignment: 1.10 Project - GitHub Prep and Structural Implementation
+    Purpose: Make a simple portfolio with About, Projects, and Contact sections.
+    JavaScript asks for a visitor's name and displays a personal welcome.
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Daniel Baez-Perez's class portfolio website">
+  <title>Daniel Baez-Perez | My Portfolio</title>
+  <style>
+    /* Simple page styling */
+    body { margin: 0; font-family: Arial, sans-serif; color: #222; background: #f3f5f8; line-height: 1.5; }
+    header { padding: 30px 18px; text-align: center; color: white; background: #21446e; }
+    header h1 { margin: 0 0 6px; }
+    nav { background: #173351; text-align: center; padding: 14px; }
+    nav a { color: white; padding: 9px 15px; text-decoration: none; }
+    nav a:hover, nav a:focus { text-decoration: underline; }
+    main { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    section { padding: 20px; margin: 18px 0; background: white; border: 1px solid #d8dfe8; border-radius: 6px; }
+    h2 { margin-top: 0; color: #21446e; }
+    .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 15px; }
+    .project { padding: 12px; border: 1px solid #d8dfe8; border-radius: 5px; }
+    .project a { display: block; color: #21446e; }
+    .project img { display: block; width: 100%; height: auto; border-radius: 4px; }
+    label { display: block; margin-top: 12px; font-weight: bold; }
+    input, textarea { box-sizing: border-box; width: 100%; padding: 10px; border: 1px solid #aab6c6; border-radius: 4px; font: inherit; }
+    textarea { min-height: 110px; }
+    button { margin-top: 14px; padding: 11px 20px; color: white; background: #21446e; border: 0; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #173351; }
+    footer { text-align: center; padding: 18px; color: #555; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Daniel Baez-Perez's Portfolio</h1>
+    <p id="welcomeMessage">Welcome to my website!</p>
+  </header>
+
+  <!-- Navigation links connect to section IDs below -->
+  <nav aria-label="Main navigation">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>Hi, my name is Daniel Baez-Perez. I am studying software development at ECPI University.</p>
+      <p>I am learning how to build webpages using HTML, CSS, and JavaScript. I want to improve my coding skills and make more projects in the future.</p>
+    </section>
+
+    <section id="projects">
+      <h2>My Projects</h2>
+      <p>These are spaces for some of the projects I will add later.</p>
+      <div class="projects">
+        <!-- Placeholder image links can be replaced with real GitHub project URLs -->
+        <div class="project">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <img src="https://placehold.co/320x180/e1e9f4/21446e?text=Project+1" alt="Placeholder image for Project 1">
+            <strong>Project 1</strong>
+          </a>
+          <p>My first webpage project.</p>
+        </div>
+        <div class="project">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <img src="https://placehold.co/320x180/e1e9f4/21446e?text=Project+2" alt="Placeholder image for Project 2">
+            <strong>Project 2</strong>
+          </a>
+          <p>A JavaScript practice project.</p>
+        </div>
+        <div class="project">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <img src="https://placehold.co/320x180/e1e9f4/21446e?text=Project+3" alt="Placeholder image for Project 3">
+            <strong>Project 3</strong>
+          </a>
+          <p>More projects coming soon.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Me</h2>
+      <p>Fill out the form below to prepare an email message.</p>
+      <!-- This opens the visitor's email app; there is no back-end mail service -->
+      <form id="contactForm">
+        <label for="sender">Your Name</label>
+        <input id="sender" name="sender" type="text" required>
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="email" required>
+        <label for="subject">Subject</label>
+        <input id="subject" name="subject" type="text" required>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+      <p id="formResult" role="status"></p>
+    </section>
+  </main>
+  <footer>Daniel Baez-Perez | ECPI University | 2026</footer>
+
+  <script>
+    // Prompt visitor for their name and store the answer in a variable
+    var visitorName = prompt("What is your name?");
+    if (visitorName && visitorName.trim() !== "") {
+      // Update the message at the top of the page with the visitor's name
+      document.getElementById("welcomeMessage").textContent =
+        "Welcome to my website, " + visitorName.trim() + "!";
+    }
+
+    // The contact form is a front-end demo and does not actually send email
+    document.getElementById("contactForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      document.getElementById("formResult").textContent =
+        "Thanks! This is a class demo form. No message was sent.";
+    });
+  </script>
+</body>
+</html>
