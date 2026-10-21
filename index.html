@@ -4,9 +4,9 @@
   <!--
     Author: Daniel Baez-Perez
     Date: 10/20/2026
-    Assignment: 1.10 Project - GitHub Prep and Structural Implementation
-    Purpose: Make a simple portfolio with About, Projects, and Contact sections.
-    JavaScript asks for a visitor's name and displays a personal welcome.
+    Assignment: 2.9 Project - Control Flow Implementation
+    Purpose: Add conditional content, a skills loop, dark mode, and a form alert.
+    This updates the Week 1 portfolio and keeps the same basic layout.
   -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,9 +33,28 @@
     button { margin-top: 14px; padding: 11px 20px; color: white; background: #21446e; border: 0; border-radius: 4px; cursor: pointer; }
     button:hover { background: #173351; }
     footer { text-align: center; padding: 18px; color: #555; }
+    /* Styles for Week 2 featured content and dark mode */
+    .feature-box { border: 1px solid #d8dfe8; padding: 14px; border-radius: 5px; margin-top: 12px; }
+    .feature-box a { color: #21446e; }
+    #modeControl { max-width: 900px; margin: 12px auto 0; padding: 0 16px; }
+    #darkMode { width: auto; margin-right: 8px; vertical-align: middle; }
+    #modeControl label { display: inline-block; margin: 0; }
+    body.dark-mode { background: #151b25; color: #f3f5f9; }
+    body.dark-mode section { background: #263143; border-color: #54657c; }
+    body.dark-mode h2 { color: #c7ddff; }
+    body.dark-mode .project, body.dark-mode .feature-box { border-color: #60718a; }
+    body.dark-mode .project a, body.dark-mode .feature-box a { color: #c7ddff; }
+    body.dark-mode footer { color: #d6dce6; }
+    body.dark-mode input, body.dark-mode textarea { background: #182231; color: #fff; border-color: #8390a5; }
+    body.dark-mode button { background: #426fa4; }
+
   </style>
 </head>
 <body>
+  <!-- Dark mode toggle at the top of the page -->
+  <div id="modeControl">
+    <label for="darkMode"><input type="checkbox" id="darkMode"> Dark Mode</label>
+  </div>
   <header>
     <h1>Daniel Baez-Perez's Portfolio</h1>
     <p id="welcomeMessage">Welcome to my website!</p>
@@ -53,6 +72,24 @@
       <h2>About Me</h2>
       <p>Hi, my name is Daniel Baez-Perez. I am studying software development at ECPI University.</p>
       <p>I am learning how to build webpages using HTML, CSS, and JavaScript. I want to improve my coding skills and make more projects in the future.</p>
+      <h3>My Skills</h3>
+      <ul id="skillsList"></ul>
+    </section>
+
+    <!-- Featured Content belongs right below About -->
+    <section id="featured">
+      <h2>Featured Content</h2>
+      <div id="universityResources" class="feature-box">
+        <h3>University Resources</h3>
+        <p><a href="https://www.ecpi.edu/programs/computer-information-science-bachelor-degree" target="_blank" rel="noopener noreferrer">ECPI Computer and Information Science program</a></p>
+      </div>
+      <div id="personalProjects" class="feature-box">
+        <h3>Personal Projects</h3>
+        <div class="projects">
+          <div class="project"><a href="https://github.com/Danielo-04/my-portfolio" target="_blank" rel="noopener noreferrer"><img src="https://placehold.co/320x180/e1e9f4/21446e?text=My+Portfolio" alt="My Portfolio project image"><strong>My Portfolio</strong></a></div>
+          <div class="project"><a href="https://github.com/Danielo-04" target="_blank" rel="noopener noreferrer"><img src="https://placehold.co/320x180/e1e9f4/21446e?text=My+GitHub" alt="GitHub projects image"><strong>More projects on GitHub</strong></a></div>
+        </div>
+      </div>
     </section>
 
     <section id="projects">
@@ -113,11 +150,36 @@
         "Welcome to my website, " + visitorName.trim() + "!";
     }
 
-    // The contact form is a front-end demo and does not actually send email
+    // Use a for loop to show five technologies I am learning.
+    var skills = ["HTML", "CSS", "JavaScript", "Python", "SQL"];
+    var skillsList = document.getElementById("skillsList");
+    for (var i = 0; i < skills.length; i++) {
+      var item = document.createElement("li");
+      item.textContent = skills[i];
+      skillsList.appendChild(item);
+    }
+
+    // Display featured information based on how many project cards exist.
+    var projectCount = document.querySelectorAll("#projects .project").length;
+    if (projectCount < 3) {
+      document.getElementById("universityResources").hidden = false;
+      document.getElementById("personalProjects").hidden = false;
+    } else {
+      document.getElementById("universityResources").hidden = true;
+      document.getElementById("personalProjects").hidden = false;
+    }
+
+    // Change the webpage colors when Dark Mode is checked.
+    document.getElementById("darkMode").addEventListener("change", function () {
+      document.body.classList.toggle("dark-mode", this.checked);
+    });
+
+    // Prevent refreshing and show a message with the sender's name.
+    // This is only a class demo. It does not actually send an email.
     document.getElementById("contactForm").addEventListener("submit", function (event) {
       event.preventDefault();
-      document.getElementById("formResult").textContent =
-        "Thanks! This is a class demo form. No message was sent.";
+      var senderName = document.getElementById("sender").value.trim();
+      alert("Thank you, " + senderName + ", your message has been sent!");
     });
   </script>
 </body>
