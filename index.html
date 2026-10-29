@@ -4,9 +4,10 @@
   <!--
     Author: Daniel Baez-Perez
     Date: 10/20/2026
-    Assignment: 2.9 Project - Control Flow Implementation
-    Purpose: Add conditional content, a skills loop, dark mode, and a form alert.
-    This updates the Week 1 portfolio and keeps the same basic layout.
+    Assignment: 3.9 Project - Creating and Referencing DOM Elements
+    Purpose: Dynamically add project content, update existing elements using
+    DOM selectors, and show a delayed contact form confirmation.
+    Previous portfolio features and styling are preserved.
   -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,8 +124,8 @@
 
     <section id="contact">
       <h2>Contact Me</h2>
-      <p>Fill out the form below to prepare an email message.</p>
-      <!-- This opens the visitor's email app; there is no back-end mail service -->
+      <p>Fill out the form below to try the contact form demonstration. No email is actually sent.</p>
+      <!-- Classroom demonstration only: this form does not send email. -->
       <form id="contactForm">
         <label for="sender">Your Name</label>
         <input id="sender" name="sender" type="text" required>
@@ -169,17 +170,40 @@
       document.getElementById("personalProjects").hidden = false;
     }
 
+    // 3.9: Dynamically create a new paragraph in the Projects section.
+    var newProjectParagraph = document.createElement("p");
+    newProjectParagraph.textContent =
+      "Recent project: I built JavaScript math tables, an automated slideshow, " +
+      "and a target heart rate calculator for my ECPI coursework.";
+    document.getElementById("projects").appendChild(newProjectParagraph);
+
+    // 3.9: Use selectors to modify two existing elements on the page.
+    var projectsHeading = document.querySelector("#projects h2");
+    projectsHeading.textContent = "My Projects and Recent Work";
+    var aboutSection = document.getElementById("about");
+    aboutSection.style.borderLeft = "5px solid #426fa4";
+
     // Change the webpage colors when Dark Mode is checked.
     document.getElementById("darkMode").addEventListener("change", function () {
       document.body.classList.toggle("dark-mode", this.checked);
     });
 
-    // Prevent refreshing and show a message with the sender's name.
-    // This is only a class demo. It does not actually send an email.
+    // 3.9: Prevent the form's default submission and show a timed confirmation.
+    // This demo does NOT actually send an email or contact a server.
+    var confirmationTimer;
     document.getElementById("contactForm").addEventListener("submit", function (event) {
       event.preventDefault();
       var senderName = document.getElementById("sender").value.trim();
-      alert("Thank you, " + senderName + ", your message has been sent!");
+      var formResult = document.getElementById("formResult");
+
+      clearTimeout(confirmationTimer);
+      formResult.textContent = "Sending message...";
+
+      // Replace the loading message after 2.5 seconds.
+      confirmationTimer = setTimeout(function () {
+        formResult.textContent = "Message sent successfully! Thank you, " +
+          senderName + ". (Demo only: no email was actually sent.)";
+      }, 2500);
     });
   </script>
 </body>
