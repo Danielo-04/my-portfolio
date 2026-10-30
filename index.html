@@ -3,11 +3,10 @@
 <head>
   <!--
     Author: Daniel Baez-Perez
-    Date: 10/20/2026
-    Assignment: 3.9 Project - Creating and Referencing DOM Elements
-    Purpose: Dynamically add project content, update existing elements using
-    DOM selectors, and show a delayed contact form confirmation.
-    Previous portfolio features and styling are preserved.
+    Date: 10/30/2026
+    Assignment: 4.8 Project - Persistent Storage
+    Purpose: Add a welcome modal, submit button tooltip, and save the
+    Dark Mode preference with localStorage. Previous features are preserved.
   -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,9 +48,36 @@
     body.dark-mode input, body.dark-mode textarea { background: #182231; color: #fff; border-color: #8390a5; }
     body.dark-mode button { background: #426fa4; }
 
+    /* 4.8: A centered welcome modal with a transparent overlay. */
+    .modal-overlay { position: fixed; inset: 0; display: flex; align-items: center;
+      justify-content: center; background: rgba(0, 0, 0, 0.6); z-index: 1000; padding: 18px; }
+    .modal-overlay[hidden] { display: none; }
+    .modal-box { width: min(420px, 100%); padding: 26px; background: #fff;
+      color: #222; border-radius: 9px; box-shadow: 0 10px 35px rgba(0,0,0,.35); text-align: center; }
+    .modal-box h2 { margin: 0 0 10px; }
+    .modal-box button { min-width: 100px; }
+
+    /* 4.8: Tooltip appears when the Submit button is hovered or focused. */
+    .submit-wrapper { position: relative; display: inline-block; }
+    .submit-tooltip { visibility: hidden; opacity: 0; position: absolute;
+      bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
+      white-space: nowrap; background: #173351; color: white; padding: 7px 10px;
+      border-radius: 4px; font-size: 13px; transition: opacity .15s; pointer-events: none; }
+    .submit-wrapper:hover .submit-tooltip,
+    .submit-wrapper:focus-within .submit-tooltip { visibility: visible; opacity: 1; }
+
   </style>
 </head>
 <body>
+  <!-- 4.8: Welcome modal appears when the webpage loads. -->
+  <div id="welcomeModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <h2 id="modalTitle">Welcome to My Portfolio</h2>
+      <p>This page is a work in progress.</p>
+      <button type="button" id="closeModal">Close</button>
+    </div>
+  </div>
+
   <!-- Dark mode toggle at the top of the page -->
   <div id="modeControl">
     <label for="darkMode"><input type="checkbox" id="darkMode"> Dark Mode</label>
@@ -135,7 +161,10 @@
         <input id="subject" name="subject" type="text" required>
         <label for="message">Message</label>
         <textarea id="message" name="message" required></textarea>
-        <button type="submit">Submit</button>
+        <span class="submit-wrapper">
+          <button type="submit" aria-describedby="submitTooltip">Submit</button>
+          <span class="submit-tooltip" id="submitTooltip" role="tooltip">Click to send your message!</span>
+        </span>
       </form>
       <p id="formResult" role="status"></p>
     </section>
@@ -143,13 +172,14 @@
   <footer>Daniel Baez-Perez | ECPI University | 2026</footer>
 
   <script>
-    // Prompt visitor for their name and store the answer in a variable
-    var visitorName = prompt("What is your name?");
-    if (visitorName && visitorName.trim() !== "") {
-      // Update the message at the top of the page with the visitor's name
-      document.getElementById("welcomeMessage").textContent =
-        "Welcome to my website, " + visitorName.trim() + "!";
-    }
+    // 4.8: Replace the old name prompt with a welcome modal.
+    var welcomeModal = document.getElementById("welcomeModal");
+    var closeModalButton = document.getElementById("closeModal");
+    closeModalButton.focus();
+    closeModalButton.addEventListener("click", function () {
+      welcomeModal.hidden = true;
+      document.getElementById("darkMode").focus();
+    });
 
     // Use a for loop to show five technologies I am learning.
     var skills = ["HTML", "CSS", "JavaScript", "Python", "SQL"];
@@ -183,9 +213,16 @@
     var aboutSection = document.getElementById("about");
     aboutSection.style.borderLeft = "5px solid #426fa4";
 
-    // Change the webpage colors when Dark Mode is checked.
-    document.getElementById("darkMode").addEventListener("change", function () {
+    // 4.8: Restore the user's saved theme each time the page loads.
+    var darkModeToggle = document.getElementById("darkMode");
+    var savedDarkMode = localStorage.getItem("portfolioDarkMode") === "true";
+    darkModeToggle.checked = savedDarkMode;
+    document.body.classList.toggle("dark-mode", savedDarkMode);
+
+    // Save each change so Dark Mode persists across reloads and visits.
+    darkModeToggle.addEventListener("change", function () {
       document.body.classList.toggle("dark-mode", this.checked);
+      localStorage.setItem("portfolioDarkMode", String(this.checked));
     });
 
     // 3.9: Prevent the form's default submission and show a timed confirmation.
